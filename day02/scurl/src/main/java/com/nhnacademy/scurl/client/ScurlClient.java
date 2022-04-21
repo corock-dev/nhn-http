@@ -14,17 +14,13 @@ import java.net.URL;
 import java.util.Objects;
 
 public class ScurlClient {
-    static ScurlArgs scurlArgs = new ScurlArgs();
+    static ScurlArgs scurlArgs = new ScurlArgs("GET");
 
     public static void main(String[] args) {
         JCommander.newBuilder().addObject(scurlArgs).build().parse(args);
 
         if (args.length <= 0) {
             throw new ArrayIndexOutOfBoundsException("인자를 설정해 주세요.");
-        }
-
-        if (!scurlArgs.isScurl()) {
-            throw new IllegalArgumentException("scurl 명령어로 시작해야 합니다.");
         }
 
         if (!scurlArgs.getEtc().contains("http://httpbin.org/get")) {
@@ -75,11 +71,14 @@ public class ScurlClient {
             String response = new String(bytes, 0, numberOfBytes, UTF_8);
 
             try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out))) {
-                out.write(requestCopy);
-                out.write("User-Agent: curl/7.79.1" + System.lineSeparator());
-                out.write("Accept: */*" + System.lineSeparator());
+                if (scurlArgs.isVerbose()) {
+                    out.write(requestCopy);
+                    out.write("User-Agent: curl/7.79.1" + System.lineSeparator());
+                    out.write("Accept: */*" + System.lineSeparator());
+                }
                 if (scurlArgs.getHeader() != null) {
                     out.write("X-Custom-Header: NA");
+                    out.write(System.lineSeparator());
                 }
                 out.write(System.lineSeparator());
 
