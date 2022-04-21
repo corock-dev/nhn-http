@@ -8,13 +8,13 @@ public class ScurlArgs {
     @Parameter(names = "scurl")
     private boolean scurl;
 
-    @Parameter(names = {"-X", "GET"})
+    @Parameter(names = {"-X"})
     private String method;
 
     @Parameter(names = "-v")
     private boolean verbose;
 
-    @Parameter(names = {"-H", "X-Custom-Header: NA"})
+    @Parameter(names = "-H")
     private String header;
 
     @Parameter

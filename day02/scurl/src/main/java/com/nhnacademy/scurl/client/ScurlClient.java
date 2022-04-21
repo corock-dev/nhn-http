@@ -56,8 +56,12 @@ public class ScurlClient {
             StringBuilder request = new StringBuilder();
             request
                 .append(method).append(" /get HTTP/1.1").append(System.lineSeparator())
-                .append("Host: ").append(url.getHost()).append(System.lineSeparator())
-                .append(System.lineSeparator());
+                .append("Host: ").append(url.getHost()).append(System.lineSeparator());
+
+            if (scurlArgs.getHeader() != null) {
+                request.append("X-Custom-Header: NA");
+            }
+            request.append(System.lineSeparator()).append(System.lineSeparator());
 
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             writer.write(request.toString());
