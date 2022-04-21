@@ -1,5 +1,6 @@
 package com.nhnacademy.scurl.client;
 
+import static java.lang.System.lineSeparator;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.beust.jcommander.JCommander;
@@ -35,7 +36,7 @@ public class ScurlClient {
             doRequest("GET", "http://httpbin.org/get");
         }
 
-        // TODO 5: (scurl.jar) -v -X POST -d "{ \"hello\": "\world\" }" -H "Content-Type: application/json" http://httpbin.org/post
+        // DONE 5: (scurl.jar) -v -X POST -d "{ \"hello\": "\world\" }" -H "Content-Type: application/json" http://httpbin.org/post
         if (Objects.equals(scurlArgs.getMethod(), "POST")) {
             doRequest("POST", "http://httpbin.org/post");
         }
@@ -53,15 +54,26 @@ public class ScurlClient {
 
             StringBuilder request = new StringBuilder();
             request
-                .append(method).append(" /get HTTP/1.1").append(System.lineSeparator())
-                .append("Host: ").append(url.getHost()).append(System.lineSeparator());
+                .append(method).append(" /").append(method.toLowerCase()).append(" HTTP/1.1")
+                .append(lineSeparator())
+                .append("Host: ").append(url.getHost()).append(lineSeparator())
+                .append("User-Agent: curl/7.79.1\"").append(lineSeparator())
+                .append("Accept: */*\"").append(lineSeparator());
 
-            String requestCopy = String.valueOf(request);
+            String requestCopy = new String(request);
+
+            if (Objects.equals(scurlArgs.getMethod(), "POST")) {
+                request
+                    .append("Content-Type: application/json").append(lineSeparator())
+                    .append("Content-Length: ").append(scurlArgs.getBody().getBytes(UTF_8).length)
+                    .append(lineSeparator()).append(lineSeparator())
+                    .append(scurlArgs.getBody());
+            }
 
             if (scurlArgs.getHeader() != null) {
                 request.append("X-Custom-Header: NA");
             }
-            request.append(System.lineSeparator()).append(System.lineSeparator());
+            request.append(lineSeparator()).append(lineSeparator());
 
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             writer.write(request.toString());
@@ -74,14 +86,17 @@ public class ScurlClient {
             try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out))) {
                 if (scurlArgs.isVerbose()) {
                     out.write(requestCopy);
-                    out.write("User-Agent: curl/7.79.1" + System.lineSeparator());
-                    out.write("Accept: */*" + System.lineSeparator());
+                    if (Objects.equals(scurlArgs.getMethod(), "POST")) {
+                        out.write("Content-Type: application/json" + lineSeparator());
+                        out.write("Content-Length: " + scurlArgs.getBody().getBytes(UTF_8).length);
+                    }
+                    out.write(lineSeparator());
                 }
                 if (scurlArgs.getHeader() != null) {
                     out.write("X-Custom-Header: NA");
-                    out.write(System.lineSeparator());
+                    out.write(lineSeparator());
                 }
-                out.write(System.lineSeparator());
+                out.write(lineSeparator());
 
                 if (!scurlArgs.isVerbose()) {
                     response = response.split("\r\n\r\n")[1];

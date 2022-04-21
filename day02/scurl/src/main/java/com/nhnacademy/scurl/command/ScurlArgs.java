@@ -39,4 +39,8 @@ public class ScurlArgs {
     public List<String> getEtc() {
         return etc;
     }
+
+    public String getBody() {
+        return body;
+    }
 }
