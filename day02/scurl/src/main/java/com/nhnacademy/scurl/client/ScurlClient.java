@@ -36,7 +36,7 @@ public class ScurlClient {
             doRequest("GET", "http://httpbin.org/get");
         }
 
-        // DONE 5: (scurl.jar) -v -X POST -d "{ \"hello\": "\world\" }" -H "Content-Type: application/json" http://httpbin.org/post
+        // DONE 5: (scurl.jar) -v -X POST -d "{ \"hello\": \"world\" }" -H "Content-Type: application/json" http://httpbin.org/post
         if (Objects.equals(scurlArgs.getMethod(), "POST")) {
             doRequest("POST", "http://httpbin.org/post");
         }
