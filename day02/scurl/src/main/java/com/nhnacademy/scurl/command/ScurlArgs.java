@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScurlArgs {
-    @Parameter(names = {"-X"})
+    @Parameter(names = "-X")
     private String method;
 
     @Parameter(names = "-v")
@@ -14,12 +14,15 @@ public class ScurlArgs {
     @Parameter(names = "-H")
     private String header;
 
-    public ScurlArgs(String method) {
-        this.method = "GET";
-    }
+    @Parameter(names = "-d")
+    private String body;
 
     @Parameter
     private List<String> etc = new ArrayList<>();
+
+    public ScurlArgs(String method) {
+        this.method = "GET";
+    }
 
     public String getMethod() {
         return method;

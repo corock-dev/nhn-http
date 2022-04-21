@@ -23,22 +23,23 @@ public class ScurlClient {
             throw new ArrayIndexOutOfBoundsException("인자를 설정해 주세요.");
         }
 
-        if (!scurlArgs.getEtc().contains("http://httpbin.org/get")) {
+        if (scurlArgs.getEtc().isEmpty()) {
             throw new IllegalArgumentException("URL 이 존재하지 않습니다.");
         }
 
-        // TODO 1: scurl http://httpbin.org/get
-        // TODO 2: scurl -X GET http://httpbin.org/get
-        // TODO 3: scurl -v http://httpbin.org/get
-        // TODO 4: scurl -v -H "X-Custom-Header: NA" http://httpbin.org/get
+        // DONE 1: (scurl.jar) http://httpbin.org/get
+        // DONE 2: (scurl.jar) -X GET http://httpbin.org/get
+        // DONE 3: (scurl.jar) -v http://httpbin.org/get
+        // DONE 4: (scurl.jar) -v -H "X-Custom-Header: NA" http://httpbin.org/get
         if (Objects.equals(scurlArgs.getMethod(), "GET")) {
             doRequest("GET", "http://httpbin.org/get");
         }
 
-        // TODO 5: scurl -v -X POST -d "{ \"hello\": "\world\" }" -H "Content-Type: application/json" http://httpbin.org/post
+        // TODO 5: (scurl.jar) -v -X POST -d "{ \"hello\": "\world\" }" -H "Content-Type: application/json" http://httpbin.org/post
         if (Objects.equals(scurlArgs.getMethod(), "POST")) {
-
+            doRequest("POST", "http://httpbin.org/post");
         }
+
         // TODO 6: scurl -L http://httpbin.org/status/302
         // TODO 7: scurl -F "upload=@file_path" http://httpbin.org/post
     }
