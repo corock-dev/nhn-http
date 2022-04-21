@@ -9,7 +9,7 @@ public class ScurlArgs {
     private boolean scurl;
 
     @Parameter(names = {"-X"})
-    private String method;
+    private String method = "GET";
 
     @Parameter(names = "-v")
     private boolean verbose;

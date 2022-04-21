@@ -27,21 +27,22 @@ public class ScurlClient {
             throw new IllegalArgumentException("scurl 명령어로 시작해야 합니다.");
         }
 
+        if (!scurlArgs.getEtc().contains("http://httpbin.org/get")) {
+            throw new IllegalArgumentException("URL 이 존재하지 않습니다.");
+        }
+
         // TODO 1: scurl http://httpbin.org/get
         // TODO 2: scurl -X GET http://httpbin.org/get
         // TODO 3: scurl -v http://httpbin.org/get
-        if (scurlArgs.getEtc().contains("http://httpbin.org/get") ||
-            Objects.equals(scurlArgs.getMethod(), "GET")) {
-
+        // TODO 4: scurl -v -H "X-Custom-Header: NA" http://httpbin.org/get
+        if (Objects.equals(scurlArgs.getMethod(), "GET")) {
             doRequest("GET", "http://httpbin.org/get");
         }
 
-        // TODO 4: scurl -v -H "X-Custom-Header: NA" http://httpbin.org/get
-        if (/* Objects.equals(args[1], "-v") && */ Objects.equals(args[2], "-H")) {
-            // doGet(args[1], "GET", "httpbin.org", args[3]);
-        }
-
         // TODO 5: scurl -v -X POST -d "{ \"hello\": "\world\" }" -H "Content-Type: application/json" http://httpbin.org/post
+        if (Objects.equals(scurlArgs.getMethod(), "POST")) {
+
+        }
         // TODO 6: scurl -L http://httpbin.org/status/302
         // TODO 7: scurl -F "upload=@file_path" http://httpbin.org/post
     }
@@ -58,6 +59,8 @@ public class ScurlClient {
                 .append(method).append(" /get HTTP/1.1").append(System.lineSeparator())
                 .append("Host: ").append(url.getHost()).append(System.lineSeparator());
 
+            String requestCopy = String.valueOf(request);
+
             if (scurlArgs.getHeader() != null) {
                 request.append("X-Custom-Header: NA");
             }
@@ -72,6 +75,14 @@ public class ScurlClient {
             String response = new String(bytes, 0, numberOfBytes, UTF_8);
 
             try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out))) {
+                out.write(requestCopy);
+                out.write("User-Agent: curl/7.79.1" + System.lineSeparator());
+                out.write("Accept: */*" + System.lineSeparator());
+                if (scurlArgs.getHeader() != null) {
+                    out.write("X-Custom-Header: NA");
+                }
+                out.write(System.lineSeparator());
+
                 if (!scurlArgs.isVerbose()) {
                     response = response.split("\r\n\r\n")[1];
                 }
@@ -90,9 +101,5 @@ public class ScurlClient {
                 }
             }
         }
-    }
-
-    private static void verbose(String response) {
-        System.out.println(response);
     }
 }
